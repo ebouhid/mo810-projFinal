@@ -71,10 +71,17 @@ def detectar_codificacao(caminho: Path) -> str:
 def ler_arquivo(caminho: Path, programas: set[str], esquema, progs, linhas_ic):
     inicio = CODIFICACOES.index(detectar_codificacao(caminho))
     for codif in CODIFICACOES[inicio:]:
+        # cada tentativa acumula à parte: se a decodificação falhar no meio do
+        # arquivo, o que foi lido até ali é descartado em vez de duplicado
+        esq, cont, linhas = [], Counter(), []
         try:
-            return _ler(caminho, codif, programas, esquema, progs, linhas_ic)
+            resultado = _ler(caminho, codif, programas, esq, cont, linhas)
         except UnicodeDecodeError:
             continue
+        esquema.extend(esq)
+        progs.update(cont)
+        linhas_ic.extend(linhas)
+        return resultado
     raise RuntimeError("não consegui decodificar o arquivo")
 
 
