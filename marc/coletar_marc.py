@@ -11,8 +11,13 @@ Duas formas de obter essas credenciais:
      Requer: pip install playwright requests pandas && playwright install chromium
 
 Uso:
-  python coletar_marc.py csvs/links20*.csv --saida marc_raw
-  python coletar_marc.py csvs/links2025.csv --curl curl.txt --pausa 1.5
+  python marc/coletar_marc.py marc/links/links*.csv --saida marc/marc_raw --curl marc/curl.txt --pausa 1.5
+
+Com --curl, se um pedido falha, o script pede de novo um id de controle que já
+funcionou: se o controle também falhar, o token expirou e o script para; se não,
+a falha é do registro (status no _log.csv, corpo em --saida/_falhas/<id>.txt) e
+a coleta segue. Respostas 200 que não são a string MARC esperada (com <br/>)
+contam como "formato-inesperado" e não são salvas como <id>.json.
 
 Saída: um JSON bruto por registro em --saida/<id>.json (retomável: pula os já
 baixados) e --saida/_log.csv com o status de cada pedido.
@@ -36,13 +41,20 @@ HEADERS_UTEIS = {"requestverificationtoken", "user-agent", "accept", "accept-lan
 
 
 def ids_dos_csvs(caminhos):
+    """(id, csv de origem) únicos. Usa a coluna 'codigo' se existir; senão extrai da url."""
     ids = []
     for c in caminhos:
         df = pd.read_csv(c)
-        for url in df["url"].dropna():
-            m = re.search(r"/detalhe/(\d+)", str(url))
+        codigos = df["codigo"] if "codigo" in df else [None] * len(df)
+        for url, cod in zip(df["url"], codigos):
+            if pd.notna(cod):
+                ids.append((int(cod), Path(c).name))
+                continue
+            m = re.search(r"/detalhe/(\d+)", str(url), re.I)
             if m:
                 ids.append((int(m.group(1)), Path(c).name))
+            else:
+                print(f"[aviso] {Path(c).name}: link sem id, não será coletado: {url}", file=sys.stderr)
     vistos, unicos = set(), []
     for i, origem in ids:
         if i not in vistos:
@@ -103,11 +115,14 @@ def pedir(sessao, codigo):
         timeout=60,
     )
     if r.status_code != 200:
-        return None, r.status_code
+        return None, r.status_code, r.text
     try:
-        return r.json(), 200
+        dados = r.json()
     except ValueError:  # veio HTML (ex.: tela de validação) em vez de JSON
-        return None, "nao-json"
+        return None, "nao-json", r.text
+    if not isinstance(dados, str) or "<br/>" not in dados:
+        return None, "formato-inesperado", r.text
+    return dados, 200, None
 
 
 def main():
@@ -117,6 +132,9 @@ def main():
     ap.add_argument("--curl", help="arquivo com o 'Copy as cURL' do DevTools")
     ap.add_argument("--pausa", type=float, default=1.0, help="segundos entre pedidos")
     ap.add_argument("--mostrar", action="store_true", help="abre o navegador visível (Playwright)")
+    ap.add_argument("--controle", type=int, default=1266276,
+                    help="id que sabidamente funciona, usado para distinguir falha do registro "
+                         "de token expirado (padrão: 1266276)")
     args = ap.parse_args()
 
     saida = Path(args.saida)
@@ -138,20 +156,34 @@ def main():
         log = csv.writer(flog)
         if novo_log:
             log.writerow(["codigo", "csv_origem", "status"])
+        ultimo_ok = args.controle
         for n, (codigo, origem) in enumerate(pendentes, 1):
-            dados, status = pedir(sessao, codigo)
+            dados, status, corpo = pedir(sessao, codigo)
             if dados is None and not args.curl:
                 # credenciais expiradas: recaptura uma vez e tenta de novo
                 sessao = nova_sessao(*credenciais_do_playwright(codigo, args.mostrar))
-                dados, status = pedir(sessao, codigo)
+                dados, status, corpo = pedir(sessao, codigo)
+            if dados is None and args.curl:
+                # A falha é do registro ou do token? Pede de novo um id que já funcionou.
+                controle_ok = False
+                if ultimo_ok is not None:
+                    time.sleep(args.pausa)
+                    controle_ok = pedir(sessao, ultimo_ok)[0] is not None
+                if not controle_ok:
+                    print(f"[{codigo}] falhou ({status}) e o id de controle {ultimo_ok} também; "
+                          "o token do cURL provavelmente expirou. Copie um novo e rode de novo "
+                          "(os já baixados são pulados).", file=sys.stderr)
+                    break
+                falhas = saida / "_falhas"
+                falhas.mkdir(exist_ok=True)
+                (falhas / f"{codigo}.txt").write_text(f"status: {status}\n\n{corpo or ''}")
+                print(f"[{codigo}] falhou ({status}); controle {ultimo_ok} ok -> falha do registro, "
+                      f"corpo em {falhas / f'{codigo}.txt'}", file=sys.stderr)
             if dados is not None:
                 (saida / f"{codigo}.json").write_text(json.dumps(dados, ensure_ascii=False, indent=1))
+                ultimo_ok = codigo
             log.writerow([codigo, origem, status])
             flog.flush()
-            if dados is None and args.curl:
-                print(f"[{codigo}] falhou ({status}); o token do cURL pode ter expirado. "
-                      "Copie um novo e rode de novo (os já baixados são pulados).", file=sys.stderr)
-                break
             if n % 25 == 0:
                 print(f"{n}/{len(pendentes)}", file=sys.stderr)
             time.sleep(args.pausa)
