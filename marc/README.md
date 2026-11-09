@@ -158,10 +158,13 @@ anotação de volta para `participacoes.csv`.
   ficam sem `tipo`. Use `nivel`, que vem da nota 502.
 - O id 434549 aparece em duas abas (2008 MESTRADO e 2013 DOUTORADO). Em `defesas.csv` fica a
   primeira ocorrência, e a outra vai para `outras_ocorrencias_planilha`.
-- 2010, célula D48: o link é um handle antigo (`jspui/handle/REPOSIP/275621`), que hoje responde
-  404, e por isso não foi coletado. Se o id for descoberto, registre-o em
-  `marc/links/ids_manuais.csv` (colunas `url,codigo,fonte`) e rode de novo o `gerar_links.py` e a
-  coleta.
+- 2010, célula D48: o link é um handle do DSpace antigo (`jspui/handle/REPOSIP/275621`), que hoje
+  responde 404. Além disso, ele apontava para uma tese da FEEC de 2001, e a planilha traz ao lado
+  a anotação "nao achei". O registro certo (917890) foi achado por busca manual e mapeado em
+  `marc/links/ids_manuais.csv` (colunas `url,codigo,fonte`), que o `gerar_links.py` aplica.
+  Ele está catalogado com data de defesa 20-12-**2013**, mas a planilha diz 20-12-2010, com a
+  numeração geral da secretaria dentro de 2010. Para corrigir links de outros casos assim,
+  acrescente linhas a esse arquivo e rode de novo o `gerar_links.py` e a coleta.
 - A planilha nova corrigiu quatro links da antiga (2021, 2022, 2023 e 2024). Os registros
   errados (1242940 do IFGW e 1089524 da FOP, entre outros) foram baixados à parte em
   `marc_raw/antigos/` só para a validação.
