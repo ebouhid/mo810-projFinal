@@ -95,7 +95,7 @@ def parsear(codigo, texto):
     marc = linhas_marc(texto)
     d = {"codigo": codigo}
     parts = []
-    banca_942, notas_500, agencias, datas = [], [], [], []
+    banca_942, notas_500, agencias, datas, dados_pesq, outros_856 = [], [], [], [], [], []
     for tag, _, subs in marc:
         if tag == "100":
             orcid, lattes = ids_externos(subs)
@@ -122,8 +122,19 @@ def parsear(codigo, texto):
             d["programa"] = " ".join(v for c, v in subs if c == "b").strip()
         elif tag == "852":
             d["unidade"] = primeiro(subs, "a")
-        elif tag == "856":
-            d.setdefault("handle", primeiro(subs, "u"))
+        elif tag == "856":  # |y "Texto completo" (handle), "DOI" (da tese), "Dados de pesquisa" (DOIs)
+            u, y = primeiro(subs, "u"), primeiro(subs, "y").rstrip(". ").lower()
+            if not u:
+                continue
+            if "hdl.handle.net" in u:
+                d.setdefault("handle", u)
+            elif y == "doi" or "10.47749/" in u:
+                d.setdefault("doi", u)
+            elif y.startswith("dados de pesquisa"):
+                if u not in dados_pesq:
+                    dados_pesq.append(u)
+            elif u not in outros_856:
+                outros_856.append(u)
         elif tag == "940":
             d["area_concentracao"] = primeiro(subs, "a").split(":", 1)[-1].strip()
         elif tag == "941":
@@ -135,6 +146,9 @@ def parsear(codigo, texto):
         elif tag == "990":
             d["tipo_obra"] = primeiro(subs, "a")
     d["agencia_fomento"] = " | ".join(agencias)
+    d["dados_pesquisa"] = " | ".join(dados_pesq)
+    if outros_856:
+        d["outros_856"] = " | ".join(outros_856)
     d["data_defesa"], d["data_defesa_txt"] = data_943(datas)
     d["notas_500"] = " | ".join(notas_500)
     d["banca_942"] = " | ".join(banca_942)

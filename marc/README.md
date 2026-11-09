@@ -95,7 +95,7 @@ por `<br/>`) são registradas como `formato-inesperado` e não são salvas.
 `resposta.json`, na raiz, é um exemplo de resposta do endpoint com os dados do autor, e também
 está no `.gitignore`.
 
-Atenção: `codigo` e `handle` levam ao registro público no repositório, onde estão o nome do
+Atenção: `codigo`, `handle` e `doi` levam ao registro público no repositório, onde estão o nome do
 aluno e o título. Já era assim com as URLs da base antiga. Leve isso em conta antes de
 publicar análises que cruzem com outras fontes.
 
@@ -105,7 +105,9 @@ publicar análises que cruzem com outras fontes.
 planilha: MESTRADO, DOUTORADO ou MESTRADO PROFISSIONAL), `outras_ocorrencias_planilha` (id
 repetido em outra aba), `nivel` (a partir da nota 502), `nota_tese` (502), `data_defesa` (943, `aaaa-mm-dd`),
 `data_defesa_txt` (texto original da 943), `agencia_fomento` (536, várias separadas por ` | `),
-`programa` (710), `unidade` (852), `handle` (856), `area_concentracao` (940), `titulacao` (941),
+`programa` (710), `unidade` (852), `handle` (856 "Texto completo"), `doi` (856 "DOI", o DOI da
+tese), `dados_pesquisa` (856 "Dados de pesquisa", DOIs de conjuntos de dados ou artigos, separados
+por ` | `), `area_concentracao` (940), `titulacao` (941),
 `tipo_obra` (990), `notas_500` (notas "Orientador(es): ..."), `banca_942` (lista da banca),
 `n_700` e `n_banca_942`. Os números de processo do 536 (`|d`) são descartados.
 
