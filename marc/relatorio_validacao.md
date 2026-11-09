@@ -1,19 +1,13 @@
 # Relatório de validação: coleta MARC vs. base antiga
 
-Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e `final_defesas_2006a2024.csv`. Base nova: 1098 defesas, 4369 participações (linhas 700).
+Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e `final_defesas_2006a2024.csv`. Base nova: 1099 defesas, 4372 participações (linhas 700).
 
 ## 1. Coleta
 
-- Links na planilha (2006–2025): **1100**; ids únicos: **1098**.
-- Registros baixados com status 200 e parseados: **1098**.
+- Links na planilha (2006–2025): **1100**; ids únicos: **1099**.
+- Registros baixados com status 200 e parseados: **1099**.
 - Falhas: **0**; ids nunca pedidos: **0**.
-- Links sem id de registro (não coletáveis): **1**.
-
-Links sem id:
-
-| ano | celula | url |
-|---|---|---|
-| 2010 | D48 | http://repositorio.unicamp.br/jspui/handle/REPOSIP/275621/ |
+- Links sem id de registro (não coletáveis): **0**.
 
 
 ## 2. Links: planilha nova vs. csvs/links{ano}.csv antigos
@@ -24,7 +18,7 @@ Links sem id:
 | 2007 | 41 | 41 |  |  |
 | 2008 | 36 | 36 |  |  |
 | 2009 | 47 | 47 |  |  |
-| 2010 | 59 | 59 |  |  |
+| 2010 | 59 | 59 | http://repositorio.unicamp.br/jspui/handle/REPOSIP/275621/ | 917890 |
 | 2011 | 52 | 52 |  |  |
 | 2012 | 55 | 55 |  |  |
 | 2013 | 58 | 58 |  |  |
@@ -89,7 +83,7 @@ Conferência do alinhamento por posição (participações que já tinham ORCID 
 
 ## 5. Defesas com nº de linhas 700 diferente do nº de nomes no 942
 
-- Total: **372** de 1098 defesas.
+- Total: **372** de 1099 defesas.
   - coorientador(es) não entram no 942: 356
   - 2º orientador (e coorientadores) não entram no 942: 7
   - coorientador/2º orientador + 700 sem papel (|e) não entram no 942: 6
@@ -163,14 +157,14 @@ Ids duplicados nos `csvs/links*.csv` antigos:
 | 1456454 | links2024.csv, links2024.csv |
 
 
-Defesas de 2010 sem `tipo` na planilha: **46** (a aba 2010 não tem o cabeçalho MESTRADO). Na base antiga eram 45. O `nivel` tirado da nota 502 cobre o buraco: MESTRADO: 45, (sem id): 1.
+Defesas de 2010 sem `tipo` na planilha: **46** (a aba 2010 não tem o cabeçalho MESTRADO). Na base antiga eram 45. O `nivel` tirado da nota 502 cobre o buraco: MESTRADO: 46.
 
-Ids: 478387, 480801, 772832, 771277, 480734, 480729, 771272, 771295, 771289, 776438, 771302, 779146, 771269, 772338, 771256, 778145, 779116, 779140, 777443, 778260, 774177, 779402, 774079, 777416, 778122, 772853, 772316, 779213, 777438, 777420, 786051, 783735, 779382, 782517, 787681, 782510, 782519, 779165, 779398, 782411, 786096, 783707, 787665, 782265, 845762, (sem id)
+Ids: 478387, 480801, 772832, 771277, 480734, 480729, 771272, 771295, 771289, 776438, 771302, 779146, 771269, 772338, 771256, 778145, 779116, 779140, 777443, 778260, 774177, 779402, 774079, 777416, 778122, 772853, 772316, 779213, 777438, 777420, 786051, 783735, 779382, 782517, 787681, 782510, 782519, 779165, 779398, 782411, 786096, 783707, 787665, 782265, 845762, 917890
 
 
 ## 8. Agência de fomento (campo 536)
 
-- Defesas com alguma agência: **485** de 1098 (44.2%). O campo existe em quase todos os registros, mas muitas vezes vem vazio ("Agência de fomento:").
+- Defesas com alguma agência: **485** de 1099 (44.1%). O campo existe em quase todos os registros, mas muitas vezes vem vazio ("Agência de fomento:").
 
 Valores (uma defesa pode ter mais de um):
 
@@ -197,7 +191,7 @@ Preenchimento por ano da planilha:
 | 2007 | 1 | 41 | 2 |
 | 2008 | 0 | 36 | 0 |
 | 2009 | 0 | 47 | 0 |
-| 2010 | 0 | 58 | 0 |
+| 2010 | 0 | 59 | 0 |
 | 2011 | 0 | 52 | 0 |
 | 2012 | 0 | 55 | 0 |
 | 2013 | 0 | 57 | 0 |
@@ -219,8 +213,8 @@ Preenchimento por ano da planilha:
 
 | papel | participações |
 |---|---|
-| Avaliador | 2883 |
-| Orientador | 1102 |
+| Avaliador | 2885 |
+| Orientador | 1103 |
 | Coorientador | 376 |
 | ? | 6 |
 | Organizador | 1 |
@@ -260,7 +254,7 @@ Defesas coletadas por ano da planilha e nível (nota 502):
 | 2007 | 0 | 11 | 29 | 1 | 41 |
 | 2008 | 0 | 11 | 25 | 0 | 36 |
 | 2009 | 0 | 15 | 32 | 0 | 47 |
-| 2010 | 0 | 13 | 45 | 0 | 58 |
+| 2010 | 0 | 13 | 46 | 0 | 59 |
 | 2011 | 0 | 14 | 38 | 0 | 52 |
 | 2012 | 0 | 21 | 34 | 0 | 55 |
 | 2013 | 0 | 17 | 40 | 0 | 57 |
@@ -276,7 +270,7 @@ Defesas coletadas por ano da planilha e nível (nota 502):
 | 2023 | 0 | 19 | 29 | 0 | 48 |
 | 2024 | 0 | 21 | 34 | 0 | 55 |
 | 2025 | 0 | 26 | 42 | 1 | 69 |
-| total | 1 | 335 | 733 | 29 | 1098 |
+| total | 1 | 335 | 734 | 29 | 1099 |
 
 
 `tipo` da planilha diferente do `nivel` da nota 502 (fora os sem tipo): **5**
@@ -299,7 +293,7 @@ Defesas coletadas por ano da planilha e nível (nota 502):
 | 822086 | 2011 | (943 ausente ou vazio) |
 | 979994 | 2016 | (943 ausente ou vazio) |
 
-- Ano da data 943 diferente da aba da planilha: **6**
+- Ano da data 943 diferente da aba da planilha: **7**
 
 | codigo | ano_planilha | data |
 |---|---|---|
@@ -309,4 +303,5 @@ Defesas coletadas por ano da planilha e nível (nota 502):
 | 397843 | 2006 | 2007-12-15 |
 | 425656 | 2008 | 2007-02-23 |
 | 896594 | 2012 | 2004-04-20 |
+| 917890 | 2010 | 2013-12-20 |
 
