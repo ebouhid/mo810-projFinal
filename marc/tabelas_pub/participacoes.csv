@@ -110,11 +110,6 @@ codigo,ordem,papel,nome,ano_nasc,orcid,lattes,pessoa_id,genero,genero_fonte
 1060709,2,Coorientador,"Andaló, Fernanda Alcântara",1981,0000-0002-5243-0921,1511096593761280,orcid:0000-0002-5243-0921,Feminino,orcid
 1060709,3,Avaliador,"Avila, Sandra Eliza Fontes de",1982,0000-0001-9068-938X,8343699060914150,orcid:0000-0001-9068-938X,Feminino,orcid
 1060709,4,Avaliador,"Marana, Aparecido Nilceu",,0000-0003-4861-7061,6027713750942689,orcid:0000-0003-4861-7061,Masculino,orcid
-1060991,1,Orientador,"Amorim, Antonio Carlos Rodrigues de",1968,0000-0002-0323-9207,3988331743668197,orcid:0000-0002-0323-9207,Masculino,orcid
-1060991,2,Avaliador,"Guimarães, Leandro Belinaso",,,,nome:guimaraes leandro belinaso,,
-1060991,3,Avaliador,"Fortes Junior, Hugo Fernando Salinas",,0000-0002-4515-2521,4938045740473426,orcid:0000-0002-4515-2521,Masculino,orcid
-1060991,4,Avaliador,"Dias, Susana Oliveira",1973,0000-0001-5814-7847,5698405999655776,orcid:0000-0001-5814-7847,Feminino,orcid
-1060991,5,Avaliador,"Strambi, Marta Luiza",1960,0000-0003-0037-5972,6619655169136233,orcid:0000-0003-0037-5972,Feminino,orcid
 1061736,1,Orientador,"Miyazawa, Flávio Keidi",1970,0000-0002-1067-6421,8436515676441851,orcid:0000-0002-1067-6421,Masculino,orcid
 1061736,2,Coorientador,"Schouery, Rafael Crivellari Saliba",1986,0000-0002-0472-4810,7229085630357788,orcid:0000-0002-0472-4810,Masculino,orcid
 1061736,3,Avaliador,"Vignatti, André Luís",,,1944386300029937,lattes:1944386300029937,,
@@ -4118,7 +4113,6 @@ codigo,ordem,papel,nome,ano_nasc,orcid,lattes,pessoa_id,genero,genero_fonte
 979871,4,Avaliador,"Pereira, Fernando Magno Quintão",,0000-0002-0375-1657,4608001746330875,orcid:0000-0002-0375-1657,Masculino,orcid
 979871,5,Avaliador,"Geus, Paulo Lício de",1956,0000-0002-6540-8686,1190759512397526,orcid:0000-0002-6540-8686,Masculino,orcid
 979871,6,Avaliador,"Aranha, Diego de Freitas",1982,0000-0002-2457-0783,9788199690491510,orcid:0000-0002-2457-0783,Masculino,orcid
-979994,1,Orientador,"Amorim, Raul Reis",1981,0000-0001-7358-6696,5289849728704414,orcid:0000-0001-7358-6696,Masculino,orcid
 979996,1,Orientador,"Araújo, Guido Costa Souza de",1962,0000-0003-4869-5190,8683914780987242,orcid:0000-0003-4869-5190,Masculino,orcid
 979996,2,Coorientador,"Amaral, José Nelson",1964,,9725605913159774,lattes:9725605913159774,,
 979996,3,Avaliador,"Baldassin, Alexandro José",1978,0000-0001-8824-3055,4738829911864396,orcid:0000-0001-8824-3055,Masculino,orcid

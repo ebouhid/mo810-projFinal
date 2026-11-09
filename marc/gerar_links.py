@@ -7,8 +7,10 @@ coleta os hyperlinks que apontam para o repositório da Unicamp. Diferenças:
   - o cabeçalho é comparado sem diferenciar maiúsculas/minúsculas (a aba 2025
     usa "Mestrado"/"Doutorado");
   - extrai o código do registro (/acervo/detalhe/<id>, sem diferenciar caixa);
-    links sem id (ex.: handle antigo jspui) podem ser resolvidos à mão em
-    <saida>/ids_manuais.csv (colunas url,codigo,fonte);
+    links podem ser corrigidos à mão em <saida>/ids_manuais.csv (colunas
+    url,codigo,fonte): com código, o link passa a apontar para esse registro
+    (ex.: handle antigo jspui); com código vazio, o link é anulado (aponta
+    para obra que não é a defesa, ex.: homônimo de outra unidade);
   - compara com os links{ano}.csv antigos (--comparar) e gera
     antigos_substituidos.csv com os ids que só existem na base antiga.
 
@@ -72,7 +74,7 @@ def comparar(novos, pasta_antiga):
         antigo = pd.read_csv(arq)
         chave = lambda u: codigo_da_url(u, {}) or u  # noqa: E731
         ant = {chave(u): u for u in antigo["url"]}
-        nov = {(int(c) if pd.notna(c) else u) for c, u in zip(df["codigo"], df["url"])}
+        nov = {chave(u) for u in df["url"]}  # compara as planilhas, sem as correções manuais
         sairam = [k for k in ant if k not in nov]
         entraram = [k for k in nov if k not in ant]
         dup = sorted({k for k in map(chave, antigo["url"]) if list(map(chave, antigo["url"])).count(k) > 1})
@@ -96,7 +98,7 @@ def main():
     manuais = {}
     if (out / "ids_manuais.csv").exists():
         m = pd.read_csv(out / "ids_manuais.csv")
-        manuais = dict(zip(m["url"], m["codigo"].astype(int)))
+        manuais = {u: (int(c) if pd.notna(c) else None) for u, c in zip(m["url"], m["codigo"])}
 
     wb = openpyxl.load_workbook(args.planilha)
     novos, onde = {}, defaultdict(list)
@@ -114,7 +116,7 @@ def main():
               f"{t.get('MESTRADO PROFISSIONAL', 0):>6}  {df['tipo'].isna().sum():>8}  "
               f"{df['codigo'].isna().sum():>6}  {sem_link or ''}")
         for u in df.loc[df["codigo"].isna(), "url"]:
-            print(f"      link sem id: {u}")
+            print(f"      link sem id{' (anulado em ids_manuais.csv)' if u in manuais else ''}: {u[:90]}")
 
     total = sum(len(d) for d in novos.values())
     print(f"\ntotal de links: {total}; ids únicos: {len(onde)}")

@@ -45,16 +45,18 @@ def ids_dos_csvs(caminhos):
     ids = []
     for c in caminhos:
         df = pd.read_csv(c)
-        codigos = df["codigo"] if "codigo" in df else [None] * len(df)
+        tem_codigo = "codigo" in df  # se há a coluna, código vazio = sem id ou link anulado
+        codigos = df["codigo"] if tem_codigo else [None] * len(df)
         for url, cod in zip(df["url"], codigos):
             if pd.notna(cod):
                 ids.append((int(cod), Path(c).name))
                 continue
-            m = re.search(r"/detalhe/(\d+)", str(url), re.I)
+            m = None if tem_codigo else re.search(r"/detalhe/(\d+)", str(url), re.I)
             if m:
                 ids.append((int(m.group(1)), Path(c).name))
             else:
-                print(f"[aviso] {Path(c).name}: link sem id, não será coletado: {url}", file=sys.stderr)
+                print(f"[aviso] {Path(c).name}: link sem id (ou anulado), não será coletado: {url[:90]}",
+                      file=sys.stderr)
     vistos, unicos = set(), []
     for i, origem in ids:
         if i not in vistos:

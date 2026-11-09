@@ -78,7 +78,7 @@ def ler_log(pasta):
 
 
 # --------------------------------------------------------------------- seções
-def secao_coleta(links, raw, defesas):
+def secao_coleta(links, raw, defesas, manuais):
     out = ["## 1. Coleta\n"]
     log = ler_log(raw)
     esperados = set(links["codigo"].dropna().astype(int))
@@ -88,15 +88,17 @@ def secao_coleta(links, raw, defesas):
     falhas = log[(log["status"] != "200") & log["codigo"].isin(esperados - ok)]
     nunca = esperados - ok - set(falhas["codigo"])
     out.append(f"- Falhas: **{len(falhas)}**; ids nunca pedidos: **{len(nunca)}**.")
-    sem_id = links[links["codigo"].isna()]
-    out.append(f"- Links sem id de registro (não coletáveis): **{len(sem_id)}**.\n")
+    sem_id = links[links["codigo"].isna()].merge(manuais[["url", "fonte"]], on="url", how="left")
+    out.append(f"- Links sem id de registro ou anulados em `links/ids_manuais.csv` (não entram na base): "
+               f"**{len(sem_id)}**.\n")
     if len(falhas):
         f = falhas.copy()
         f["motivo"] = [(Path(raw) / "_falhas" / f"{c}.txt").read_text()[:200].replace("\n", " ")
                        if (Path(raw) / "_falhas" / f"{c}.txt").exists() else "" for c in f["codigo"]]
         out.append("Falhas:\n\n" + md_tabela(f[["codigo", "csv_origem", "status", "motivo"]]))
     if len(sem_id):
-        out.append("Links sem id:\n\n" + md_tabela(sem_id[["ano", "celula", "url"]]))
+        out.append("Links sem id ou anulados:\n\n"
+                   + md_tabela(sem_id.assign(url=sem_id["url"].str.slice(0, 70))[["ano", "celula", "url", "fonte"]]))
     if nunca:
         lista = sorted(nunca)
         out.append(f"Ids nunca pedidos ({len(lista)}): {lista[:30]}{' ...' if len(lista) > 30 else ''}\n")
@@ -113,7 +115,7 @@ def secao_links(links, pasta_antiga):
             continue
         ant = pd.read_csv(arq)["url"]
         k_ant = [codigo_url(u) or u for u in ant]
-        k_nov = [int(c) if pd.notna(c) else u for c, u in zip(g["codigo"], g["url"])]
+        k_nov = [codigo_url(u) or u for u in g["url"]]  # compara as planilhas, sem as correções manuais
         linhas.append({"ano": ano, "antigo": len(ant), "novo": len(g),
                        "saíram": ", ".join(map(str, sorted(set(map(str, k_ant)) - set(map(str, k_nov))))),
                        "entraram": ", ".join(map(str, sorted(set(map(str, k_nov)) - set(map(str, k_ant)))))})
@@ -136,7 +138,8 @@ def secao_orcids(old, av_cols, defesas, parts):
     out.append(f"- Defesas da base antiga (`final_defesas_2006a2024.csv`): {len(old)}; "
                f"com o mesmo id na nova: **{len(comuns)}**; ausentes na nova: {len(fora)}.")
     if len(fora):
-        out.append("  Ausentes: " + ", ".join(f"{c} ({a})" for c, a in zip(fora["codigo"], fora["ano"])))
+        out.append("  Ausentes (ids trocados na planilha nova ou links anulados em `ids_manuais.csv`): "
+                   + ", ".join(f"{c} ({a})" for c, a in zip(fora["codigo"], fora["ano"])))
     pp = parts.groupby("codigo")
     div, recuperados_or = [], 0
     for _, r in comuns.iterrows():
@@ -297,7 +300,7 @@ def secao_700_942(defesas, parts):
     return "\n".join(out) + "\n"
 
 
-def secao_fora_ic(defesas, antigos):
+def secao_fora_ic(defesas, antigos, anulados):
     out = ["## 6. Registros cuja nota 502 ou unidade 852 não é do Instituto de Computação\n"]
     cols = ["codigo", "ano_planilha", "nota_tese", "unidade", "programa", "tipo_obra"]
     d = defesas.copy()
@@ -319,6 +322,11 @@ def secao_fora_ic(defesas, antigos):
         out.append(f"  - {k}: {v}")
     out.append("")
     out.append(md_tabela(f))
+    if len(anulados):
+        out.append("\nRegistros **excluídos da base**: o link da planilha foi anulado em `links/ids_manuais.csv` "
+                   "porque aponta para uma obra que não é a defesa (o registro certo ainda não foi achado):\n")
+        out.append(md_tabela(anulados[["codigo", "ano_planilha", "celula", "nota_tese", "unidade", "tipo_obra",
+                                       "fonte"]]))
     if len(antigos):
         a = antigos.copy()
         a["fora_do_IC"] = [not eh_ic(n, u) for n, u in zip(a["nota_tese"], a["unidade"])]
@@ -445,16 +453,29 @@ def main():
                        | {"ano_antigo": ano_ant.get(int(arq.stem))})
     antigos = pd.DataFrame(antigos)
 
+    arq_man = Path(args.links) / "ids_manuais.csv"
+    manuais = pd.read_csv(arq_man) if arq_man.exists() else pd.DataFrame(columns=["url", "codigo", "fonte"])
+    anulados = []
+    for _, m in manuais[manuais["codigo"].isna()].iterrows():
+        cod = codigo_url(m["url"])
+        lk = links[links["url"] == m["url"]]
+        arq = Path(args.raw) / f"{cod}.json"
+        d = parsear(cod, json.loads(arq.read_text()))[0] if cod and arq.exists() else {}
+        anulados.append({"codigo": cod, "ano_planilha": lk["ano"].iloc[0] if len(lk) else None,
+                         "celula": lk["celula"].iloc[0] if len(lk) else None, "nota_tese": d.get("nota_tese"),
+                         "unidade": d.get("unidade"), "tipo_obra": d.get("tipo_obra"), "fonte": m["fonte"]})
+    anulados = pd.DataFrame(anulados)
+
     partes = [
         "# Relatório de validação: coleta MARC vs. base antiga\n",
         f"Gerado por `marc/validar.py` a partir de `{args.pub}/` (desidentificada) e `{args.antiga}`. "
         f"Base nova: {len(defesas)} defesas, {len(parts)} participações (linhas 700).\n",
-        secao_coleta(links, args.raw, defesas),
+        secao_coleta(links, args.raw, defesas, manuais),
         secao_links(links, args.links_antigos),
         secao_orcids(old, av_cols, defesas, parts),
         secao_sem_orcid(old, av_cols, defesas, parts),
         secao_700_942(defesas, parts),
-        secao_fora_ic(defesas, antigos),
+        secao_fora_ic(defesas, antigos, anulados),
         secao_duplicados(links, args.links_antigos, defesas, old),
         secao_536(defesas),
         secao_papeis(defesas, parts),

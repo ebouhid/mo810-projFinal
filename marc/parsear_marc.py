@@ -194,11 +194,15 @@ def main():
             df[col] = df[col].astype("Int64")
     if "data_defesa" in df_d:
         df_d["data_defesa"] = pd.to_datetime(df_d["data_defesa"], format="%d-%m-%Y", errors="coerce")
-    if args.links:
-        df_d = info_planilha(args.links).merge(df_d, on="codigo", how="right")
-        sem = df_d["ano_planilha"].isna().sum()
-        if sem:
-            print(f"[aviso] {sem} defesas sem correspondência nos links da planilha")
+    if args.links:  # a base é o que a planilha liga: registros baixados sem link (ou anulados) saem
+        info = info_planilha(args.links)
+        fora = sorted(set(df_d["codigo"]) - set(info["codigo"]))
+        if fora:
+            print(f"[aviso] {len(fora)} registros em {args.pasta} sem link na planilha "
+                  f"(ou anulados em ids_manuais.csv), ignorados: {fora}")
+        df_d = info.merge(df_d, on="codigo", how="right")  # "right" mantém a ordem dos arquivos
+        df_d = df_d[df_d["codigo"].isin(info["codigo"])].reset_index(drop=True)
+        df_p = df_p[df_p["codigo"].isin(df_d["codigo"])].reset_index(drop=True)
         df_d["ano_planilha"] = df_d["ano_planilha"].astype("Int64")
     if args.desidentificar:
         df_d = df_d.drop(columns=[c for c in ["autor_nome", "autor_ano_nasc", "autor_orcid",

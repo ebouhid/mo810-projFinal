@@ -1,13 +1,20 @@
 # Relatório de validação: coleta MARC vs. base antiga
 
-Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e `final_defesas_2006a2024.csv`. Base nova: 1099 defesas, 4372 participações (linhas 700).
+Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e `final_defesas_2006a2024.csv`. Base nova: 1097 defesas, 4366 participações (linhas 700).
 
 ## 1. Coleta
 
-- Links na planilha (2006–2025): **1100**; ids únicos: **1099**.
-- Registros baixados com status 200 e parseados: **1099**.
+- Links na planilha (2006–2025): **1100**; ids únicos: **1097**.
+- Registros baixados com status 200 e parseados: **1097**.
 - Falhas: **0**; ids nunca pedidos: **0**.
-- Links sem id de registro (não coletáveis): **0**.
+- Links sem id de registro ou anulados em `links/ids_manuais.csv` (não entram na base): **2**.
+
+Links sem id ou anulados:
+
+| ano | celula | url | fonte |
+|---|---|---|---|
+| 2016 | D60 | https://repositorio.unicamp.br/acervo/detalhe/979994?guid=165256394066 | link anulado (2026-11-09): aponta para um TCC do Instituto de Geociências de um homônimo do aluno; registro certo ainda não localizado |
+| 2019 | D8 | https://repositorio.unicamp.br/acervo/detalhe/1060991?guid=16528100207 | link anulado (2026-11-09): aponta para uma tese da Faculdade de Educação (a busca casou nomes de campos diferentes); registro certo ainda não localizado |
 
 
 ## 2. Links: planilha nova vs. csvs/links{ano}.csv antigos
@@ -18,7 +25,7 @@ Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e
 | 2007 | 41 | 41 |  |  |
 | 2008 | 36 | 36 |  |  |
 | 2009 | 47 | 47 |  |  |
-| 2010 | 59 | 59 | http://repositorio.unicamp.br/jspui/handle/REPOSIP/275621/ | 917890 |
+| 2010 | 59 | 59 |  |  |
 | 2011 | 52 | 52 |  |  |
 | 2012 | 55 | 55 |  |  |
 | 2013 | 58 | 58 |  |  |
@@ -38,8 +45,8 @@ Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e
 
 ## 3. ORCIDs: base antiga vs. nova (mesmo id)
 
-- Defesas da base antiga (`final_defesas_2006a2024.csv`): 1028; com o mesmo id na nova: **1026**; ausentes na nova: 2.
-  Ausentes: 480769 (2023), 1089524 (2024)
+- Defesas da base antiga (`final_defesas_2006a2024.csv`): 1028; com o mesmo id na nova: **1024**; ausentes na nova: 4.
+  Ausentes (ids trocados na planilha nova ou links anulados em `ids_manuais.csv`): 979994 (2016), 1060991 (2019), 480769 (2023), 1089524 (2024)
 - Divergências de orientador: **3**; de conjunto de avaliadores: **15**.
 - Orientador antes "sem orcid" e agora com ORCID: 0 (não conta como divergência).
 - Critério: ORCIDs normalizados (`0000-0000-0000-000X`). Avaliadores divergem se um ORCID antigo não aparece entre os `Avaliador` novos, ou se há mais ORCIDs novos do que "sem orcid" antigos.
@@ -73,30 +80,27 @@ Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e
 |---|---|---|---|---|---|---|---|
 | 2006–12 | 366 | 366 | 100.0 | 19 | 164 | 0 | 0 |
 | 2013–18 | 190 | 190 | 100.0 | 16 | 53 | 0 | 0 |
-| 2019–24 | 102 | 100 | 98.0 | 22 | 45 | 0 | 2 |
-| **total** | 658 | 656 | 99.7 | 57 | 262 | 0 | 2 |
+| 2019–24 | 102 | 99 | 97.1 | 22 | 45 | 0 | 3 |
+| **total** | 658 | 655 | 99.5 | 57 | 262 | 0 | 3 |
 
 
-Conferência do alinhamento por posição (participações que já tinham ORCID na base antiga): 3042 com o mesmo ORCID na posição correspondente, 15 diferentes.
+Conferência do alinhamento por posição (participações que já tinham ORCID na base antiga): 3037 com o mesmo ORCID na posição correspondente, 15 diferentes.
 "Não alinhável": o nº de avaliadores difere entre as bases, então não dá para saber qual pessoa nova corresponde ao "sem orcid". "Agora com ORCID": o registro foi atualizado no repositório depois da coleta antiga.
 
 
 ## 5. Defesas com nº de linhas 700 diferente do nº de nomes no 942
 
-- Total: **372** de 1099 defesas.
+- Total: **371** de 1097 defesas.
   - coorientador(es) não entram no 942: 356
   - 2º orientador (e coorientadores) não entram no 942: 7
   - coorientador/2º orientador + 700 sem papel (|e) não entram no 942: 6
   - 700 com papel incomum (Presidente/Organizador) não entra no 942: 2
-  - não explicado: 1
 
 Nos registros conferidos, o campo 942 ("Banca:") lista o (primeiro) orientador e os avaliadores, mas **nunca o coorientador nem o segundo orientador** (dupla orientação/cotutela). Diferenças explicadas por isso não indicam erro.
 
 ### Não explicadas
 
-| codigo | ano_planilha | n_700 | n_banca_942 | Coorientador | sem_papel | no_942_fora_do_700 | explicacao |
-|---|---|---|---|---|---|---|---|
-| 979994 | 2016 | 1 | 0 | 0 | 0 |  | não explicado |
+_(nenhum)_
 
 ### Explicadas por coorientador ou 2º orientador (só os ids)
 
@@ -105,15 +109,12 @@ Nos registros conferidos, o campo 942 ("Banca:") lista o (primeiro) orientador e
 
 ## 6. Registros cuja nota 502 ou unidade 852 não é do Instituto de Computação
 
-- Na base nova: **16**. Por classificação:
+- Na base nova: **14**. Por classificação:
   - 852 de outra unidade; 502 e 710 do IC (catalogação): 10
   - 502 com grafia variante/sem a unidade; 852 do IC (catalogação): 4
-  - **não é do IC** (502, 852 e 710 de outra unidade): 2
 
 | codigo | ano_planilha | classificacao | nota_tese | unidade | programa | tipo_obra |
 |---|---|---|---|---|---|---|
-| 979994 | 2016 | **não é do IC** (502, 852 e 710 de outra unidade) | Trabalho de Conclusão de Curso (graduação) - Universidade Estadual de Campinas, Instituto de Geociências | Instituto de Geociências | Instituto de Geociências. | TCC |
-| 1060991 | 2019 | **não é do IC** (502, 852 e 710 de outra unidade) | Tese (doutorado) - Universidade Estadual de Campinas, Faculdade de Educação | Faculdade de Educação | Faculdade de Educação Programa de Pós-Graduação em Educação | TESE |
 | 437602 | 2009 | 502 com grafia variante/sem a unidade; 852 do IC (catalogação) | Tese (doutorado) - Universidade Estadual de Campinas, Instituto da Computação | Instituto de Computação | Instituto de Computação. Programa de Pós-Graduação em Ciência da Computação. | TESE |
 | 448924 | 2009 | 502 com grafia variante/sem a unidade; 852 do IC (catalogação) | Dissertação (mestrado) - Universidade Estadual de Campinas, Institutot de Computação | Instituto de Computação | Instituto de Computação. Programa de Pós-Graduação em Ciência da Computação. | DISSERTAÇÃO |
 | 787665 | 2010 | 502 com grafia variante/sem a unidade; 852 do IC (catalogação) | Dissertação (mestrado) - Universidade Estadual de Campinas, Insituto de Computação | Instituto de Computação | Instituto de Computação. Programa de Pós-Graduação em Ciência da Computação. | DISSERTAÇÃO |
@@ -128,6 +129,14 @@ Nos registros conferidos, o campo 942 ("Banca:") lista o (primeiro) orientador e
 | 1456870 | 2024 | 852 de outra unidade; 502 e 710 do IC (catalogação) | Dissertação (mestrado) - Universidade Estadual de Campinas (UNICAMP), Instituto de Computação | Instituto de Matemática, Estatística e Computação Científica | Instituto de Computação. Programa de Pós-Graduação em Ciência da Computação. | DISSERTAÇÃO |
 | 1506329 | 2025 | 852 de outra unidade; 502 e 710 do IC (catalogação) | Dissertação (mestrado) - Universidade Estadual de Campinas (UNICAMP), Instituto de Computação | Instituto de Matemática, Estatística e Computação Científica | Instituto de Computação. Programa de Pós-Graduação em Ciência da Computação. | DISSERTAÇÃO |
 | 1509319 | 2025 | 852 de outra unidade; 502 e 710 do IC (catalogação) | Dissertação (mestrado) - Universidade Estadual de Campinas (UNICAMP), Instituto de Computação | Instituto de Matemática, Estatística e Computação Científica | Instituto de Matemática, Estatística e Ciência da Computação. Programa de Pós-Graduação em Ciência da Computação. | DISSERTAÇÃO |
+
+
+Registros **excluídos da base**: o link da planilha foi anulado em `links/ids_manuais.csv` porque aponta para uma obra que não é a defesa (o registro certo ainda não foi achado):
+
+| codigo | ano_planilha | celula | nota_tese | unidade | tipo_obra | fonte |
+|---|---|---|---|---|---|---|
+| 979994 | 2016 | D60 | Trabalho de Conclusão de Curso (graduação) - Universidade Estadual de Campinas, Instituto de Geociências | Instituto de Geociências | TCC | link anulado (2026-11-09): aponta para um TCC do Instituto de Geociências de um homônimo do aluno; registro certo ainda não localizado |
+| 1060991 | 2019 | D8 | Tese (doutorado) - Universidade Estadual de Campinas, Faculdade de Educação | Faculdade de Educação | TESE | link anulado (2026-11-09): aponta para uma tese da Faculdade de Educação (a busca casou nomes de campos diferentes); registro certo ainda não localizado |
 
 
 Ids que só existem na base antiga (a planilha nova trocou os links), coletados à parte em `marc_raw/antigos/` só para esta checagem:
@@ -164,7 +173,7 @@ Ids: 478387, 480801, 772832, 771277, 480734, 480729, 771272, 771295, 771289, 776
 
 ## 8. Agência de fomento (campo 536)
 
-- Defesas com alguma agência: **485** de 1099 (44.1%). O campo existe em quase todos os registros, mas muitas vezes vem vazio ("Agência de fomento:").
+- Defesas com alguma agência: **485** de 1097 (44.2%). O campo existe em quase todos os registros, mas muitas vezes vem vazio ("Agência de fomento:").
 
 Valores (uma defesa pode ter mais de um):
 
@@ -197,10 +206,10 @@ Preenchimento por ano da planilha:
 | 2013 | 0 | 57 | 0 |
 | 2014 | 1 | 44 | 2 |
 | 2015 | 42 | 61 | 69 |
-| 2016 | 56 | 61 | 92 |
+| 2016 | 56 | 60 | 93 |
 | 2017 | 44 | 57 | 77 |
 | 2018 | 42 | 54 | 78 |
-| 2019 | 43 | 50 | 86 |
+| 2019 | 43 | 49 | 88 |
 | 2020 | 49 | 69 | 71 |
 | 2021 | 45 | 58 | 78 |
 | 2022 | 41 | 55 | 75 |
@@ -213,8 +222,8 @@ Preenchimento por ano da planilha:
 
 | papel | participações |
 |---|---|
-| Avaliador | 2885 |
-| Orientador | 1103 |
+| Avaliador | 2881 |
+| Orientador | 1101 |
 | Coorientador | 376 |
 | ? | 6 |
 | Organizador | 1 |
@@ -248,56 +257,52 @@ Papéis fora de Avaliador/Orientador/Coorientador (mantidos como estão no MARC;
 
 Defesas coletadas por ano da planilha e nível (nota 502):
 
-| ano_planilha | (vazio) | DOUTORADO | MESTRADO | MESTRADO PROFISSIONAL | total |
-|---|---|---|---|---|---|
-| 2006 | 0 | 12 | 32 | 27 | 71 |
-| 2007 | 0 | 11 | 29 | 1 | 41 |
-| 2008 | 0 | 11 | 25 | 0 | 36 |
-| 2009 | 0 | 15 | 32 | 0 | 47 |
-| 2010 | 0 | 13 | 46 | 0 | 59 |
-| 2011 | 0 | 14 | 38 | 0 | 52 |
-| 2012 | 0 | 21 | 34 | 0 | 55 |
-| 2013 | 0 | 17 | 40 | 0 | 57 |
-| 2014 | 0 | 13 | 31 | 0 | 44 |
-| 2015 | 0 | 18 | 43 | 0 | 61 |
-| 2016 | 1 | 23 | 37 | 0 | 61 |
-| 2017 | 0 | 17 | 40 | 0 | 57 |
-| 2018 | 0 | 17 | 37 | 0 | 54 |
-| 2019 | 0 | 16 | 34 | 0 | 50 |
-| 2020 | 0 | 15 | 54 | 0 | 69 |
-| 2021 | 0 | 17 | 41 | 0 | 58 |
-| 2022 | 0 | 19 | 36 | 0 | 55 |
-| 2023 | 0 | 19 | 29 | 0 | 48 |
-| 2024 | 0 | 21 | 34 | 0 | 55 |
-| 2025 | 0 | 26 | 42 | 1 | 69 |
-| total | 1 | 335 | 734 | 29 | 1099 |
+| ano_planilha | DOUTORADO | MESTRADO | MESTRADO PROFISSIONAL | total |
+|---|---|---|---|---|
+| 2006 | 12 | 32 | 27 | 71 |
+| 2007 | 11 | 29 | 1 | 41 |
+| 2008 | 11 | 25 | 0 | 36 |
+| 2009 | 15 | 32 | 0 | 47 |
+| 2010 | 13 | 46 | 0 | 59 |
+| 2011 | 14 | 38 | 0 | 52 |
+| 2012 | 21 | 34 | 0 | 55 |
+| 2013 | 17 | 40 | 0 | 57 |
+| 2014 | 13 | 31 | 0 | 44 |
+| 2015 | 18 | 43 | 0 | 61 |
+| 2016 | 23 | 37 | 0 | 60 |
+| 2017 | 17 | 40 | 0 | 57 |
+| 2018 | 17 | 37 | 0 | 54 |
+| 2019 | 15 | 34 | 0 | 49 |
+| 2020 | 15 | 54 | 0 | 69 |
+| 2021 | 17 | 41 | 0 | 58 |
+| 2022 | 19 | 36 | 0 | 55 |
+| 2023 | 19 | 29 | 0 | 48 |
+| 2024 | 21 | 34 | 0 | 55 |
+| 2025 | 26 | 42 | 1 | 69 |
+| total | 334 | 734 | 29 | 1097 |
 
 
-`tipo` da planilha diferente do `nivel` da nota 502 (fora os sem tipo): **5**
+`tipo` da planilha diferente do `nivel` da nota 502 (fora os sem tipo): **3**
 
 | codigo | ano_planilha | tipo | nivel | nota_tese |
 |---|---|---|---|---|
-| 1060991 | 2019 | MESTRADO | DOUTORADO | Tese (doutorado) - Universidade Estadual de Campinas, Faculdade de Educação |
 | 1540326 | 2025 | MESTRADO | MESTRADO PROFISSIONAL | Dissertação (mestrado profissional) - Universidade Estadual de Campinas (UNICAMP), Instituto de Computação |
 | 404987 | 2006 | MESTRADO PROFISSIONAL | MESTRADO | Dissertação (mestrado) - Universidade Estadual de Campinas, Instituto de  Computação |
 | 415555 | 2007 | MESTRADO | DOUTORADO | Tese (doutorado) - Universidade Estadual de Campinas, Instituto de Computação. |
-| 979994 | 2016 | DOUTORADO |  | Trabalho de Conclusão de Curso (graduação) - Universidade Estadual de Campinas, Instituto de Geociências |
 
 
-- Data da defesa (943) ausente ou não interpretável: **4**
+- Data da defesa (943) ausente ou não interpretável: **3**
 
 | codigo | ano_planilha | data_defesa_txt |
 |---|---|---|
 | 1506491 | 2025 | (943 ausente ou vazio) |
 | 378303 | 2006 | 20-02 206 |
 | 822086 | 2011 | (943 ausente ou vazio) |
-| 979994 | 2016 | (943 ausente ou vazio) |
 
-- Ano da data 943 diferente da aba da planilha: **7**
+- Ano da data 943 diferente da aba da planilha: **6**
 
 | codigo | ano_planilha | data |
 |---|---|---|
-| 1060991 | 2019 | 2018-04-26 |
 | 373710 | 2006 | 2004-02-23 |
 | 397009 | 2006 | 2007-05-15 |
 | 397843 | 2006 | 2007-12-15 |
