@@ -1,20 +1,13 @@
 # Relatório de validação: coleta MARC vs. base antiga
 
-Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e `final_defesas_2006a2024.csv`. Base nova: 1097 defesas, 4366 participações (linhas 700).
+Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e `final_defesas_2006a2024.csv`. Base nova: 1099 defesas, 4375 participações (linhas 700).
 
 ## 1. Coleta
 
-- Links na planilha (2006–2025): **1100**; ids únicos: **1097**.
-- Registros baixados com status 200 e parseados: **1097**.
+- Links na planilha (2006–2025): **1100**; ids únicos: **1099**.
+- Registros baixados com status 200 e parseados: **1099**.
 - Falhas: **0**; ids nunca pedidos: **0**.
-- Links sem id de registro ou anulados em `links/ids_manuais.csv` (não entram na base): **2**.
-
-Links sem id ou anulados:
-
-| ano | celula | url | fonte |
-|---|---|---|---|
-| 2016 | D60 | https://repositorio.unicamp.br/acervo/detalhe/979994?guid=165256394066 | link anulado (2026-11-09): aponta para um TCC do Instituto de Geociências de um homônimo do aluno; registro certo ainda não localizado |
-| 2019 | D8 | https://repositorio.unicamp.br/acervo/detalhe/1060991?guid=16528100207 | link anulado (2026-11-09): aponta para uma tese da Faculdade de Educação (a busca casou nomes de campos diferentes); registro certo ainda não localizado |
+- Links sem id de registro ou anulados em `links/ids_manuais.csv` (não entram na base): **0**.
 
 
 ## 2. Links: planilha nova vs. csvs/links{ano}.csv antigos
@@ -46,7 +39,7 @@ Links sem id ou anulados:
 ## 3. ORCIDs: base antiga vs. nova (mesmo id)
 
 - Defesas da base antiga (`final_defesas_2006a2024.csv`): 1028; com o mesmo id na nova: **1024**; ausentes na nova: 4.
-  Ausentes (ids trocados na planilha nova ou links anulados em `ids_manuais.csv`): 979994 (2016), 1060991 (2019), 480769 (2023), 1089524 (2024)
+  Ausentes (ids trocados na planilha nova ou corrigidos/anulados em `ids_manuais.csv`): 979994 (2016), 1060991 (2019), 480769 (2023), 1089524 (2024)
 - Divergências de orientador: **3**; de conjunto de avaliadores: **15**.
 - Orientador antes "sem orcid" e agora com ORCID: 0 (não conta como divergência).
 - Critério: ORCIDs normalizados (`0000-0000-0000-000X`). Avaliadores divergem se um ORCID antigo não aparece entre os `Avaliador` novos, ou se há mais ORCIDs novos do que "sem orcid" antigos.
@@ -90,8 +83,8 @@ Conferência do alinhamento por posição (participações que já tinham ORCID 
 
 ## 5. Defesas com nº de linhas 700 diferente do nº de nomes no 942
 
-- Total: **371** de 1097 defesas.
-  - coorientador(es) não entram no 942: 356
+- Total: **373** de 1099 defesas.
+  - coorientador(es) não entram no 942: 358
   - 2º orientador (e coorientadores) não entram no 942: 7
   - coorientador/2º orientador + 700 sem papel (|e) não entram no 942: 6
   - 700 com papel incomum (Presidente/Organizador) não entra no 942: 2
@@ -104,7 +97,7 @@ _(nenhum)_
 
 ### Explicadas por coorientador ou 2º orientador (só os ids)
 
-1014614, 1014622, 1022097, 1031433, 1034706, 1035934, 1045562, 1050562, 1052146, 1060175, 1060709, 1061736, 1062749, 1062788, 1062910, 1064125, 1079656, 1079882, 1080338, 1080384, 1081295, 1081374, 1081804, 1082810, 1082977, 1089548, 1089611, 1090831, 1091134, 1091235, 1091333, 1091949, 1095682, 1096114, 1097898, 1121198, 1126430, 1126478, 1126948, 1127094, 1127108, 1128679, 1128803, 1128918, 1129083, 1129107, 1129149, 1129256, 1129334, 1129341, 1148929, 1149064, 1149200, 1157234, 1157496, 1157501, 1157515, 1157604, 1157685, 1157713, 1157788, 1158115, 1161410, 1161434, 1161648, 1161700, 1161715, 1161854, 1162360, 1164221, 1164238, 1164514, 1164542, 1164703, 1165307, 1165392, 1165864, 1166113, 1166371, 1166600, 1167318, 1170196, 1170202, 1170400, 1231958, 1235753, 1236073, 1236423, 1237384, 1239069, 1241300, 1241314, 1241978, 1242638, 1242931, 1244851, 1247973, 1248397, 1249064, 1249078, 1254071, 1254351, 1254557, 1254700, 1258784, 1259169, 1259671, 1260085, 1260802, 1267507, 1274358, 1297927, 1313341, 1338842, 1341471, 1342249, 1342942, 1346037, 1346774, 1347215, 1347602, 1362019, 1362654, 1363183, 1371284, 1371294, 1371375, 1371384, 1371723, 1371766, 1371803, 1372592, 1374170, 1374643, 1374913, 1376657, 1378810, 1379182, 1380388, 1384107, 1384597, 1384752, 1384867, 1384992, 1389654, 1390745, 1394128, 1394578, 1394645, 1394730, 1394764, 1395407, 1397795, 1398630, 1406201, 1408046, 1409397, 1409513, 1410421, 1411984, 1412466, 1436248, 1455804, 1456019, 1456218, 1456431, 1456436, 1456655, 1456842, 1456870, 1456876, 1490236, 1498645, 1498825, 1498859, 1498995, 1499023, 1499027, 1499435, 1499436, 1499777, 1501090, 1501685, 1506246, 1506609, 1507851, 1507897, 1508764, 1508781, 1508794, 1509112, 1509177, 1509319, 1509363, 1519497, 1519548, 1521322, 1521398, 1522520, 1522768, 1526465, 1527774, 1529515, 1529628, 1531915, 1540639, 1541418, 1544947, 1547619, 364410, 372953, 372982, 373192, 377504, 378058, 378324, 385673, 385706, 385776, 397843, 398426, 398427, 399410, 399466, 399489, 399615, 403718, 403868, 408757, 409260, 410052, 410063, 420752, 429546, 430019, 434428, 444356, 444561, 444926, 445476, 446556, 467483, 477130, 479696, 771256, 771269, 772853, 774079, 776458, 777601, 779213, 779398, 782497, 782510, 782519, 787681, 795402, 798142, 798651, 803009, 818405, 836668, 837152, 838912, 845811, 854836, 862508, 867041, 898838, 900635, 900666, 901718, 902622, 903641, 904617, 906006, 909776, 910355, 911592, 911619, 912865, 913827, 914760, 914939, 918032, 918754, 918763, 918924, 920397, 926523, 926578, 926582, 926600, 927569, 928470, 928475, 931099, 931530, 931956, 931972, 932013, 932506, 932513, 934630, 935835, 935853, 937441, 944925, 945092, 945171, 945944, 947717, 949473, 950343, 950532, 951342, 951350, 951382, 953970, 959709, 959748, 959777, 959789, 961153, 962103, 965252, 970857, 971449, 971818, 971900, 972970, 973034, 973327, 974200, 974392, 974502, 974575, 974962, 975456, 976389, 977097, 978685, 978688, 978692, 978836, 978844, 979031, 979352, 979360, 979871, 979996, 980786, 983916, 983950, 984216, 984319, 984498, 985165, 986043, 986670, 987504, 988452, 988854, 989419, 989599, 989942, 990899, 991387, 991617, 991730, 994808
+1014614, 1014622, 1022097, 1031433, 1034706, 1035934, 1045562, 1050562, 1052146, 1060175, 1060709, 1061736, 1062749, 1062788, 1062910, 1064125, 1079656, 1079882, 1080338, 1080384, 1081295, 1081374, 1081804, 1082810, 1082977, 1089548, 1089611, 1089706, 1090831, 1091134, 1091235, 1091333, 1091949, 1095682, 1096114, 1097898, 1121198, 1126430, 1126478, 1126948, 1127094, 1127108, 1128679, 1128803, 1128918, 1129083, 1129107, 1129149, 1129256, 1129334, 1129341, 1148929, 1149064, 1149200, 1157234, 1157496, 1157501, 1157515, 1157604, 1157685, 1157713, 1157788, 1158115, 1161410, 1161434, 1161648, 1161700, 1161715, 1161854, 1162360, 1164221, 1164238, 1164514, 1164542, 1164703, 1165307, 1165392, 1165864, 1166113, 1166371, 1166600, 1167318, 1170196, 1170202, 1170400, 1231958, 1235753, 1236073, 1236423, 1237384, 1239069, 1241300, 1241314, 1241978, 1242638, 1242931, 1244851, 1247973, 1248397, 1249064, 1249078, 1254071, 1254351, 1254557, 1254700, 1258784, 1259169, 1259671, 1260085, 1260802, 1267507, 1274358, 1297927, 1313341, 1338842, 1341471, 1342249, 1342942, 1346037, 1346774, 1347215, 1347602, 1362019, 1362654, 1363183, 1371284, 1371294, 1371375, 1371384, 1371723, 1371766, 1371803, 1372592, 1374170, 1374643, 1374913, 1376657, 1378810, 1379182, 1380388, 1384107, 1384597, 1384752, 1384867, 1384992, 1389654, 1390745, 1394128, 1394578, 1394645, 1394730, 1394764, 1395407, 1397795, 1398630, 1406201, 1408046, 1409397, 1409513, 1410421, 1411984, 1412466, 1436248, 1455804, 1456019, 1456218, 1456431, 1456436, 1456655, 1456842, 1456870, 1456876, 1490236, 1498645, 1498825, 1498859, 1498995, 1499023, 1499027, 1499435, 1499436, 1499777, 1501090, 1501685, 1506246, 1506609, 1507851, 1507897, 1508764, 1508781, 1508794, 1509112, 1509177, 1509319, 1509363, 1519497, 1519548, 1521322, 1521398, 1522520, 1522768, 1526465, 1527774, 1529515, 1529628, 1531915, 1540639, 1541418, 1544947, 1547619, 364410, 372953, 372982, 373192, 377504, 378058, 378324, 385673, 385706, 385776, 397843, 398426, 398427, 399410, 399466, 399489, 399615, 403718, 403868, 408757, 409260, 410052, 410063, 420752, 429546, 430019, 434428, 444356, 444561, 444926, 445476, 446556, 467483, 477130, 479696, 771256, 771269, 772853, 774079, 776458, 777601, 779213, 779398, 782497, 782510, 782519, 787681, 795402, 798142, 798651, 803009, 818405, 836668, 837152, 838912, 845811, 854836, 862508, 867041, 898838, 900635, 900666, 901718, 902622, 903641, 904617, 906006, 909776, 910355, 911592, 911619, 912865, 913827, 914760, 914939, 918032, 918754, 918763, 918924, 920397, 926523, 926578, 926582, 926600, 927569, 928470, 928475, 931099, 931530, 931956, 931972, 932013, 932506, 932513, 934630, 935835, 935853, 937441, 944925, 945092, 945171, 945944, 947717, 949473, 950343, 950532, 951342, 951350, 951382, 953970, 959709, 959748, 959777, 959789, 961153, 962103, 965252, 970857, 971449, 971818, 971900, 972970, 973034, 973327, 974200, 974392, 974502, 974575, 974962, 975456, 976389, 977097, 978685, 978688, 978692, 978836, 978844, 979031, 979352, 979360, 979626, 979871, 979996, 980786, 983916, 983950, 984216, 984319, 984498, 985165, 986043, 986670, 987504, 988452, 988854, 989419, 989599, 989942, 990899, 991387, 991617, 991730, 994808
 
 
 ## 6. Registros cuja nota 502 ou unidade 852 não é do Instituto de Computação
@@ -131,12 +124,13 @@ _(nenhum)_
 | 1509319 | 2025 | 852 de outra unidade; 502 e 710 do IC (catalogação) | Dissertação (mestrado) - Universidade Estadual de Campinas (UNICAMP), Instituto de Computação | Instituto de Matemática, Estatística e Computação Científica | Instituto de Matemática, Estatística e Ciência da Computação. Programa de Pós-Graduação em Ciência da Computação. | DISSERTAÇÃO |
 
 
-Registros **excluídos da base**: o link da planilha foi anulado em `links/ids_manuais.csv` porque aponta para uma obra que não é a defesa (o registro certo ainda não foi achado):
+Links da planilha **corrigidos à mão** em `links/ids_manuais.csv` (o registro do link original não é a defesa; `(anulado)` = registro certo ainda não achado, a linha fica fora da base):
 
-| codigo | ano_planilha | celula | nota_tese | unidade | tipo_obra | fonte |
+| ano_planilha | celula | id_na_planilha | codigo_usado | 502_do_id_da_planilha | 852_do_id_da_planilha | fonte |
 |---|---|---|---|---|---|---|
-| 979994 | 2016 | D60 | Trabalho de Conclusão de Curso (graduação) - Universidade Estadual de Campinas, Instituto de Geociências | Instituto de Geociências | TCC | link anulado (2026-11-09): aponta para um TCC do Instituto de Geociências de um homônimo do aluno; registro certo ainda não localizado |
-| 1060991 | 2019 | D8 | Tese (doutorado) - Universidade Estadual de Campinas, Faculdade de Educação | Faculdade de Educação | TESE | link anulado (2026-11-09): aponta para uma tese da Faculdade de Educação (a busca casou nomes de campos diferentes); registro certo ainda não localizado |
+| 2010 | D48 | (handle antigo, sem id) | 917890 |  |  | busca manual no repositório (2026-11-09); o handle antigo aponta para uma tese da FEEC de 2001; o registro certo está catalogado com data de defesa 20-12-2013 |
+| 2016 | D60 | 979994 | 979626 | Trabalho de Conclusão de Curso (graduação) - Universidade Estadual de Campinas, Instituto de Geociências | Instituto de Geociências | busca manual no repositório (2026-11-09): o link da planilha apontava para 979994, um TCC do Instituto de Geociências de um homônimo do aluno; 979626 confere com aluno, orientador, data e nível da planilha |
+| 2019 | D8 | 1060991 | 1089706 | Tese (doutorado) - Universidade Estadual de Campinas, Faculdade de Educação | Faculdade de Educação | busca manual no repositório (2026-11-09): o link da planilha apontava para 1060991, uma tese da Faculdade de Educação (a busca casou nomes de campos diferentes); 1089706 confere com aluno, orientador, data e nível da planilha |
 
 
 Ids que só existem na base antiga (a planilha nova trocou os links), coletados à parte em `marc_raw/antigos/` só para esta checagem:
@@ -173,15 +167,15 @@ Ids: 478387, 480801, 772832, 771277, 480734, 480729, 771272, 771295, 771289, 776
 
 ## 8. Agência de fomento (campo 536)
 
-- Defesas com alguma agência: **485** de 1097 (44.2%). O campo existe em quase todos os registros, mas muitas vezes vem vazio ("Agência de fomento:").
+- Defesas com alguma agência: **487** de 1099 (44.3%). O campo existe em quase todos os registros, mas muitas vezes vem vazio ("Agência de fomento:").
 
 Valores (uma defesa pode ter mais de um):
 
 | agencia | defesas |
 |---|---|
-| CAPES | 308 |
-| CNPQ | 236 |
-| FAPESP | 180 |
+| CAPES | 309 |
+| CNPQ | 237 |
+| FAPESP | 181 |
 | Funcamp | 28 |
 | FAEPEX | 6 |
 | CPqD/Campinas | 1 |
@@ -206,10 +200,10 @@ Preenchimento por ano da planilha:
 | 2013 | 0 | 57 | 0 |
 | 2014 | 1 | 44 | 2 |
 | 2015 | 42 | 61 | 69 |
-| 2016 | 56 | 60 | 93 |
+| 2016 | 57 | 61 | 93 |
 | 2017 | 44 | 57 | 77 |
 | 2018 | 42 | 54 | 78 |
-| 2019 | 43 | 49 | 88 |
+| 2019 | 44 | 50 | 88 |
 | 2020 | 49 | 69 | 71 |
 | 2021 | 45 | 58 | 78 |
 | 2022 | 41 | 55 | 75 |
@@ -222,15 +216,15 @@ Preenchimento por ano da planilha:
 
 | papel | participações |
 |---|---|
-| Avaliador | 2881 |
-| Orientador | 1101 |
-| Coorientador | 376 |
+| Avaliador | 2886 |
+| Orientador | 1103 |
+| Coorientador | 378 |
 | ? | 6 |
 | Organizador | 1 |
 | Presidente | 1 |
 
 
-- Coorientadores: **376** participações em **363** defesas (352 com ORCID). A base antiga não tinha nenhum.
+- Coorientadores: **378** participações em **365** defesas (354 com ORCID). A base antiga não tinha nenhum.
 - Linhas 700 sem papel (`|e`): **6**. O papel não foi inferido.
 - Linhas 700 com papel "Autor" (seriam o estudante): **0**.
 
@@ -269,17 +263,17 @@ Defesas coletadas por ano da planilha e nível (nota 502):
 | 2013 | 17 | 40 | 0 | 57 |
 | 2014 | 13 | 31 | 0 | 44 |
 | 2015 | 18 | 43 | 0 | 61 |
-| 2016 | 23 | 37 | 0 | 60 |
+| 2016 | 24 | 37 | 0 | 61 |
 | 2017 | 17 | 40 | 0 | 57 |
 | 2018 | 17 | 37 | 0 | 54 |
-| 2019 | 15 | 34 | 0 | 49 |
+| 2019 | 15 | 35 | 0 | 50 |
 | 2020 | 15 | 54 | 0 | 69 |
 | 2021 | 17 | 41 | 0 | 58 |
 | 2022 | 19 | 36 | 0 | 55 |
 | 2023 | 19 | 29 | 0 | 48 |
 | 2024 | 21 | 34 | 0 | 55 |
 | 2025 | 26 | 42 | 1 | 69 |
-| total | 334 | 734 | 29 | 1097 |
+| total | 335 | 735 | 29 | 1099 |
 
 
 `tipo` da planilha diferente do `nivel` da nota 502 (fora os sem tipo): **3**

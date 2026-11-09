@@ -138,7 +138,7 @@ def secao_orcids(old, av_cols, defesas, parts):
     out.append(f"- Defesas da base antiga (`final_defesas_2006a2024.csv`): {len(old)}; "
                f"com o mesmo id na nova: **{len(comuns)}**; ausentes na nova: {len(fora)}.")
     if len(fora):
-        out.append("  Ausentes (ids trocados na planilha nova ou links anulados em `ids_manuais.csv`): "
+        out.append("  Ausentes (ids trocados na planilha nova ou corrigidos/anulados em `ids_manuais.csv`): "
                    + ", ".join(f"{c} ({a})" for c, a in zip(fora["codigo"], fora["ano"])))
     pp = parts.groupby("codigo")
     div, recuperados_or = [], 0
@@ -300,7 +300,7 @@ def secao_700_942(defesas, parts):
     return "\n".join(out) + "\n"
 
 
-def secao_fora_ic(defesas, antigos, anulados):
+def secao_fora_ic(defesas, antigos, corrigidos):
     out = ["## 6. Registros cuja nota 502 ou unidade 852 não é do Instituto de Computação\n"]
     cols = ["codigo", "ano_planilha", "nota_tese", "unidade", "programa", "tipo_obra"]
     d = defesas.copy()
@@ -322,11 +322,11 @@ def secao_fora_ic(defesas, antigos, anulados):
         out.append(f"  - {k}: {v}")
     out.append("")
     out.append(md_tabela(f))
-    if len(anulados):
-        out.append("\nRegistros **excluídos da base**: o link da planilha foi anulado em `links/ids_manuais.csv` "
-                   "porque aponta para uma obra que não é a defesa (o registro certo ainda não foi achado):\n")
-        out.append(md_tabela(anulados[["codigo", "ano_planilha", "celula", "nota_tese", "unidade", "tipo_obra",
-                                       "fonte"]]))
+    if len(corrigidos):
+        out.append("\nLinks da planilha **corrigidos à mão** em `links/ids_manuais.csv` (o registro do link "
+                   "original não é a defesa; `(anulado)` = registro certo ainda não achado, a linha fica fora "
+                   "da base):\n")
+        out.append(md_tabela(corrigidos))
     if len(antigos):
         a = antigos.copy()
         a["fora_do_IC"] = [not eh_ic(n, u) for n, u in zip(a["nota_tese"], a["unidade"])]
@@ -455,16 +455,19 @@ def main():
 
     arq_man = Path(args.links) / "ids_manuais.csv"
     manuais = pd.read_csv(arq_man) if arq_man.exists() else pd.DataFrame(columns=["url", "codigo", "fonte"])
-    anulados = []
-    for _, m in manuais[manuais["codigo"].isna()].iterrows():
+    corrigidos = []  # links da planilha corrigidos (código novo) ou anulados (código vazio) à mão
+    for _, m in manuais.iterrows():
         cod = codigo_url(m["url"])
         lk = links[links["url"] == m["url"]]
         arq = Path(args.raw) / f"{cod}.json"
         d = parsear(cod, json.loads(arq.read_text()))[0] if cod and arq.exists() else {}
-        anulados.append({"codigo": cod, "ano_planilha": lk["ano"].iloc[0] if len(lk) else None,
-                         "celula": lk["celula"].iloc[0] if len(lk) else None, "nota_tese": d.get("nota_tese"),
-                         "unidade": d.get("unidade"), "tipo_obra": d.get("tipo_obra"), "fonte": m["fonte"]})
-    anulados = pd.DataFrame(anulados)
+        corrigidos.append({"ano_planilha": lk["ano"].iloc[0] if len(lk) else None,
+                           "celula": lk["celula"].iloc[0] if len(lk) else None,
+                           "id_na_planilha": cod or "(handle antigo, sem id)",
+                           "codigo_usado": int(m["codigo"]) if pd.notna(m["codigo"]) else "(anulado)",
+                           "502_do_id_da_planilha": d.get("nota_tese"), "852_do_id_da_planilha": d.get("unidade"),
+                           "fonte": m["fonte"]})
+    corrigidos = pd.DataFrame(corrigidos)
 
     partes = [
         "# Relatório de validação: coleta MARC vs. base antiga\n",
@@ -475,7 +478,7 @@ def main():
         secao_orcids(old, av_cols, defesas, parts),
         secao_sem_orcid(old, av_cols, defesas, parts),
         secao_700_942(defesas, parts),
-        secao_fora_ic(defesas, antigos, anulados),
+        secao_fora_ic(defesas, antigos, corrigidos),
         secao_duplicados(links, args.links_antigos, defesas, old),
         secao_536(defesas),
         secao_papeis(defesas, parts),

@@ -151,15 +151,14 @@ anotação de volta para `participacoes.csv`.
 - O repositório **removeu o ORCID** de algumas participações depois da coleta antiga (por
   exemplo, Fabio Verdi e David Menotti). Nesses casos, a base antiga é a única ligação por
   identificador (veja `dica_base_antiga`).
-- Dois links da planilha apontavam para obras que **não são do IC** e foram **anulados** em
-  `marc/links/ids_manuais.csv`, com código vazio:
+- Dois links da planilha apontavam para obras que **não são do IC**:
   - aba 2016, D60 → 979994, um TCC de Geociências de um homônimo do aluno;
   - aba 2019, D8 → 1060991, uma tese da Faculdade de Educação; a busca casou nomes de campos
     diferentes.
 
-  As duas defesas do IC dessas linhas existem, mas os registros certos ainda não foram achados.
-  Quando forem, basta preencher o `codigo` e rodar o fluxo de novo. A base antiga do MO412
-  incluía essas duas bancas.
+  Os registros certos foram achados por busca manual: **979626** e **1089706**. Os dois
+  conferem com aluno, orientador, data e nível da planilha e estão mapeados em
+  `marc/links/ids_manuais.csv`. A base antiga do MO412 incluía as bancas erradas.
 - Outros 14 registros têm 502 ou 852 com grafia variante, ou o 852 de outra unidade (por
   exemplo, o IMECC em 2024–25), mas são do IC.
 - 3 defesas estão sem data (943 ausente, vazio ou com erro de digitação).
@@ -172,7 +171,8 @@ anotação de volta para `participacoes.csv`.
   a anotação "nao achei". O registro certo (917890) foi achado por busca manual e mapeado em
   `marc/links/ids_manuais.csv` (colunas `url,codigo,fonte`), que o `gerar_links.py` aplica. Com
   `codigo` preenchido, o link passa a apontar para esse registro. Com `codigo` vazio, o link é
-  anulado e o registro sai da base: o `parsear_marc.py` só considera registros ligados à planilha.
+  anulado e a linha fica fora da base. Em qualquer caso, o `parsear_marc.py` só considera os
+  registros ligados à planilha: um JSON baixado e não ligado (como 979994) é ignorado.
   Ele está catalogado com data de defesa 20-12-**2013**, mas a planilha diz 20-12-2010, com a
   numeração geral da secretaria dentro de 2010. Para corrigir links de outros casos assim,
   acrescente linhas a esse arquivo e rode de novo o `gerar_links.py` e a coleta.

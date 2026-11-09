@@ -241,6 +241,10 @@ codigo,ordem,papel,nome,ano_nasc,orcid,lattes,pessoa_id,genero,genero_fonte
 1089611,4,Avaliador,"Figueroa Rivero, Pascual Jovino",,,8032571810050332,lattes:8032571810050332,,
 1089611,5,Avaliador,"Carvalho, Marco Antonio Garcia de",1970,0000-0002-1941-6036,6366443994619479,orcid:0000-0002-1941-6036,Masculino,orcid
 1089611,6,Avaliador,"Santanchè, André",1968,0000-0002-1756-4852,5121623021406209,orcid:0000-0002-1756-4852,Masculino,orcid
+1089706,1,Orientador,"Aranha, Diego de Freitas",1982,0000-0002-2457-0783,9788199690491510,orcid:0000-0002-2457-0783,Masculino,orcid
+1089706,2,Coorientador,"Borin, Edson",1979,0000-0003-1783-4231,4176915322233893,orcid:0000-0003-1783-4231,Masculino,orcid
+1089706,3,Avaliador,"Simplício Júnior, Marcos Antônio",,0000-0001-5227-7165,6874544707185541,orcid:0000-0001-5227-7165,Masculino,orcid
+1089706,4,Avaliador,"López Hernández, Julio César",1961,0000-0002-6731-1482,2183709942839032,orcid:0000-0002-6731-1482,Masculino,orcid
 1089751,1,Orientador,"Baranauskas, Maria Cecilia Calani",1954,0000-0002-4830-5298,1750385790843118,orcid:0000-0002-4830-5298,Feminino,orcid
 1089751,2,Avaliador,"Santanchè, André",1968,0000-0002-1756-4852,5121623021406209,orcid:0000-0002-1756-4852,Masculino,orcid
 1089751,3,Avaliador,"Neris, Vânia Paula de Almeida",,0000-0002-4059-8700,0268728255033469,orcid:0000-0002-4059-8700,Feminino,orcid
@@ -4102,6 +4106,11 @@ codigo,ordem,papel,nome,ano_nasc,orcid,lattes,pessoa_id,genero,genero_fonte
 979564,1,Orientador,"Rubira, Cecília Mary Fischer",1964,0000-0003-4549-7105,1396497553199632,orcid:0000-0003-4549-7105,Feminino,orcid
 979564,2,Avaliador,"Beder, Delano Medeiros",,0000-0003-3692-2202,5845245549777383,orcid:0000-0003-3692-2202,Masculino,orcid
 979564,3,Avaliador,"Martins, Eliane",1955,0000-0003-4290-6508,7628786577802962,orcid:0000-0003-4290-6508,Feminino,orcid
+979626,1,Orientador,"Souza, Cid Carvalho de",1963,0000-0002-5945-0845,9852157976516603,orcid:0000-0002-5945-0845,Masculino,orcid
+979626,2,Coorientador,"Yunes, Tallys Hoover",,0000-0002-8308-7812,8339755661450439,orcid:0000-0002-8308-7812,,
+979626,3,Avaliador,"Ribeiro, Celso da Cruz Carneiro",,,,nome:ribeiro celso da cruz carneiro,,
+979626,4,Avaliador,"Urrutia, Sebastián Alberto",,,,nome:urrutia sebastian alberto,,
+979626,5,Avaliador,"Usberti, Fábio Luiz",1982,0000-0002-8972-080X,6034522313829097,orcid:0000-0002-8972-080X,Masculino,orcid
 979636,1,Orientador,"Dias, Zanoni",1975,0000-0003-3333-6822,1789677069372972,orcid:0000-0003-3333-6822,Masculino,orcid
 979636,2,Avaliador,"Walter, Maria Emília Machado Telles",,0000-0001-6822-931X,0216229039021964,orcid:0000-0001-6822-931X,Feminino,orcid
 979636,3,Avaliador,"Fernandes, Cristina Gomes",1966,0000-0002-5259-2859,1399158997660627,orcid:0000-0002-5259-2859,Feminino,orcid
