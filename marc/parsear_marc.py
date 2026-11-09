@@ -65,8 +65,10 @@ def ids_externos(subs):
 
 
 def nome(subs):
-    """|a sem a vírgula final que aparece em parte dos registros ("Miyazawa, Flávio Keidi,")."""
-    return primeiro(subs, "a").rstrip(", ")
+    """|a sem a vírgula/ponto final que aparece em parte dos registros ("Miyazawa, Flávio Keidi,",
+    "Kijak, Ewa."). O ponto de uma inicial ("Silva, J.") é mantido."""
+    n = re.sub(r"\s+\.$", "", primeiro(subs, "a").rstrip(", "))
+    return re.sub(r"(\w{2,})\.$", r"\1", n)
 
 
 def papel(subs):
