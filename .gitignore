@@ -1,3 +1,11 @@
 dados/capes_discentes/
 ic_capes/
 capes_discentes.tar.xz
+
+# Coleta MARC (marc/): credenciais e dados pessoais de estudantes
+marc/curl.txt
+marc/marc_raw/
+marc/tabelas/
+marc/*.xlsx
+
+__pycache__/
