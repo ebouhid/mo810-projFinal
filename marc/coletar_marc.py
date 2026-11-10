@@ -129,7 +129,7 @@ def pedir(sessao, codigo):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("csvs", nargs="+", help="CSVs com coluna 'url' (ex.: csvs/links2025.csv)")
+    ap.add_argument("csvs", nargs="+", help="CSVs com coluna 'url' (ex.: marc/links/links2025.csv)")
     ap.add_argument("--saida", default="marc_raw")
     ap.add_argument("--curl", help="arquivo com o 'Copy as cURL' do DevTools")
     ap.add_argument("--pausa", type=float, default=1.0, help="segundos entre pedidos")

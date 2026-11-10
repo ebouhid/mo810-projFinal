@@ -106,7 +106,7 @@ def secao_coleta(links, raw, defesas, manuais):
 
 
 def secao_links(links, pasta_antiga):
-    out = ["## 2. Links: planilha nova vs. csvs/links{ano}.csv antigos\n"]
+    out = [f"## 2. Links: planilha nova vs. {pasta_antiga}/links{{ano}}.csv antigos\n"]
     linhas = []
     for ano, g in links.groupby("ano"):
         arq = Path(pasta_antiga) / f"links{ano}.csv"
@@ -348,7 +348,7 @@ def secao_duplicados(links, pasta_antiga, defesas, old):
     ant = pd.DataFrame(ant).dropna().astype({"codigo": int})
     dup_ant = ant[ant["codigo"].duplicated(keep=False)].sort_values("codigo")
     dup_ant = dup_ant.groupby("codigo")["arquivo"].apply(lambda s: ", ".join(s)).reset_index()
-    out.append("\nIds duplicados nos `csvs/links*.csv` antigos:\n\n" + md_tabela(dup_ant))
+    out.append(f"\nIds duplicados nos `{pasta_antiga}/links*.csv` antigos:\n\n" + md_tabela(dup_ant))
     s10 = links[(links["ano"] == 2010) & links["tipo"].isna()]
     niv = defesas.set_index("codigo")["nivel"]
     s10 = s10.assign(nivel_502=[niv.get(int(c), "(não coletado)") if pd.notna(c) else "(sem id)"
@@ -430,9 +430,9 @@ def secao_extras(defesas):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--pub", default="marc/tabelas_pub")
-    ap.add_argument("--antiga", default="final_defesas_2006a2024.csv")
+    ap.add_argument("--antiga", default="base_mo412/final_defesas_2006a2024.csv")
     ap.add_argument("--links", default="marc/links")
-    ap.add_argument("--links-antigos", default="csvs")
+    ap.add_argument("--links-antigos", default="base_mo412/csvs")
     ap.add_argument("--raw", default="marc/marc_raw")
     ap.add_argument("--saida", default="marc/relatorio_validacao.md")
     args = ap.parse_args()

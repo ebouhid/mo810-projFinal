@@ -1,4 +1,4 @@
-"""Leva o gênero anotado (csvs/genero2.csv) para participacoes.csv e lista quem falta anotar.
+"""Leva o gênero anotado (base_mo412/csvs/genero2.csv) para participacoes.csv e lista quem falta anotar.
 
 Só docentes/avaliadores (linhas MARC 700). NÃO infere gênero pelo nome: a
 anotação é manual e feita pelo grupo.
@@ -15,7 +15,7 @@ Gênero (colunas genero, genero_fonte):
   - se uma pessoa tem ORCIDs com gêneros diferentes no genero2, fica sem gênero
     e é reportada como conflito;
   - ligação só pelo nome nunca atribui gênero: vira dica em a_anotar_genero.csv;
-  - dica_base_antiga: ORCID que a base antiga (final_defesas_2006a2024.csv)
+  - dica_base_antiga: ORCID que a base antiga (base_mo412/final_defesas_2006a2024.csv)
     tinha na mesma posição da banca, quando o registro atual não tem ORCID
     (o repositório removeu o ORCID de alguns registros). Também só dica.
 
@@ -132,9 +132,9 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--tabelas", nargs="+", default=["marc/tabelas", "marc/tabelas_pub"],
                     help="pastas com participacoes.csv e defesas.csv; a primeira é a base")
-    ap.add_argument("--genero", default="csvs/genero2.csv")
+    ap.add_argument("--genero", default="base_mo412/csvs/genero2.csv")
     ap.add_argument("--anotar", default="marc/a_anotar_genero.csv")
-    ap.add_argument("--base-antiga", default="final_defesas_2006a2024.csv",
+    ap.add_argument("--base-antiga", default="base_mo412/final_defesas_2006a2024.csv",
                     help="base antiga, para a dica de ORCID perdido (vazio para não usar)")
     args = ap.parse_args()
 

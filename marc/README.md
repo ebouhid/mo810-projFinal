@@ -1,7 +1,7 @@
 # Coleta MARC das defesas do IC/Unicamp (2006–2025)
 
-Base para o projeto de MO810 (Feminismo de Dados). Esta coleta substitui o caminho antigo
-(`get_links.py` → `crawler2.py` com Selenium → scripts de ORCID → `junta_planilhas.ipynb`), que
+Base para o projeto de MO810 (Feminismo de Dados). Esta coleta substitui o caminho antigo do
+[repositório do MO412](https://github.com/gondimjoaom/mo412-projetofinal) (`get_links.py` → `crawler2.py` com Selenium → scripts de ORCID → `junta_planilhas.ipynb`), que
 guardava só os ORCIDs das linhas MARC 700. Aqui o registro MARC **completo** de cada defesa vem
 de um endpoint JSON do repositório da Unicamp (Sophia Biblioteca Web). Com isso temos:
 
@@ -10,8 +10,8 @@ de um endpoint JSON do repositório da Unicamp (Sophia Biblioteca Web). Com isso
 - data da defesa (943), nível (502), agência de fomento (536), programa (710), unidade (852),
   handle (856), área (940) e titulação (941), entre outros.
 
-Os CSVs antigos (`csvs/*`, `final_defesas_2006a2024.csv`) **não** são alterados. Eles servem de
-referência para a validação.
+Os CSVs antigos do MO412 estão copiados, sem alteração, em `base_mo412/` (origem em
+`base_mo412/README.md`). Eles servem de referência para a validação e trazem o `genero2.csv`.
 
 ## Fluxo
 
@@ -21,7 +21,7 @@ Todos os comandos rodam a partir da raiz do repositório.
 # 1. links: uma lista por aba de ano da planilha do IC
 python marc/gerar_links.py \
     --planilha "marc/Histórico de Defesas de Mestrado e Doutorado - 2026.xlsx" \
-    --inicio 2006 --fim 2025 --saida marc/links --comparar csvs
+    --inicio 2006 --fim 2025 --saida marc/links --comparar base_mo412/csvs
 
 # 2. coleta: um JSON bruto por registro (retomável: pula os já baixados)
 python marc/coletar_marc.py marc/links/links*.csv --saida marc/marc_raw --curl marc/curl.txt --pausa 1.5
@@ -92,8 +92,8 @@ por `<br/>`) são registradas como `formato-inesperado` e não são salvas.
 | `a_anotar_genero.csv` | pessoas sem gênero anotado | não (docentes/avaliadores) | sim |
 | `relatorio_validacao.md` | resultado do `validar.py` | não (gerado só de `tabelas_pub/`) | sim |
 
-`resposta.json`, na raiz, é um exemplo de resposta do endpoint com os dados do autor, e também
-está no `.gitignore`.
+No repositório do MO412 havia também um `resposta.json` (exemplo de resposta do endpoint com os
+dados do autor, fora do controle de versão). Ele não foi trazido para cá.
 
 Atenção: `codigo`, `handle` e `doi` levam ao registro público no repositório, onde estão o nome do
 aluno e o título. Já era assim com as URLs da base antiga. Leve isso em conta antes de
@@ -118,7 +118,7 @@ porque há zeros à esquerda), `pessoa_id`, `genero` e `genero_fonte`.
 
 ## Gênero
 
-O `genero.py` leva o gênero do `csvs/genero2.csv` (anotação manual feita no MO412) para
+O `genero.py` leva o gênero do `base_mo412/csvs/genero2.csv` (anotação manual feita no MO412) para
 `participacoes.csv`. Ele **não infere gênero pelo nome**.
 
 - `pessoa_id`: participações com o mesmo ORCID ou o mesmo Lattes são a mesma pessoa

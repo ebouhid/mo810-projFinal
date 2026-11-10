@@ -18,7 +18,7 @@ Não copia nome do aluno nem título: só tipo, url, código, ano e célula.
 
 Uso:
   python marc/gerar_links.py --planilha "marc/Histórico de Defesas de Mestrado e Doutorado - 2026.xlsx" \
-      --inicio 2006 --fim 2025 --saida marc/links --comparar csvs
+      --inicio 2006 --fim 2025 --saida marc/links --comparar base_mo412/csvs
 """
 import argparse
 import datetime
@@ -90,7 +90,7 @@ def main():
     ap.add_argument("--inicio", type=int, default=2006)
     ap.add_argument("--fim", type=int, required=True, help="último ano (inclusive)")
     ap.add_argument("--saida", default="marc/links")
-    ap.add_argument("--comparar", help="pasta com os links{ano}.csv antigos (ex.: csvs)")
+    ap.add_argument("--comparar", help="pasta com os links{ano}.csv antigos (ex.: base_mo412/csvs)")
     args = ap.parse_args()
 
     out = Path(args.saida)

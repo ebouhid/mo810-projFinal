@@ -1,6 +1,6 @@
 # Relatório de validação: coleta MARC vs. base antiga
 
-Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e `final_defesas_2006a2024.csv`. Base nova: 1099 defesas, 4375 participações (linhas 700).
+Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e `base_mo412/final_defesas_2006a2024.csv`. Base nova: 1099 defesas, 4375 participações (linhas 700).
 
 ## 1. Coleta
 
@@ -10,7 +10,7 @@ Gerado por `marc/validar.py` a partir de `marc/tabelas_pub/` (desidentificada) e
 - Links sem id de registro ou anulados em `links/ids_manuais.csv` (não entram na base): **0**.
 
 
-## 2. Links: planilha nova vs. csvs/links{ano}.csv antigos
+## 2. Links: planilha nova vs. base_mo412/csvs/links{ano}.csv antigos
 
 | ano | antigo | novo | saíram | entraram |
 |---|---|---|---|---|
@@ -152,7 +152,7 @@ Ids duplicados na planilha nova:
 | 434549 | 2013 | D60 | DOUTORADO |
 
 
-Ids duplicados nos `csvs/links*.csv` antigos:
+Ids duplicados nos `base_mo412/csvs/links*.csv` antigos:
 
 | codigo | arquivo |
 |---|---|
