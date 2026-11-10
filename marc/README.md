@@ -141,6 +141,40 @@ participações. Colunas:
 As dicas servem para o grupo conferir, não são atribuições. O `pessoa_id` permite levar a
 anotação de volta para `participacoes.csv`.
 
+### Fontes verificadas que não trazem gênero
+
+Verificado em novembro de 2026. Registrado aqui para ninguém refazer a busca.
+
+- **CAPES, "Docentes da Pós-Graduação Stricto Sensu"** (os quatro conjuntos: 2004–2012,
+  2013–2016, 2017–2020 e 2021–2024). Nenhum CSV publicado tem coluna de sexo ou gênero. O
+  dicionário de 2004–2012 lista `TP_SEXO_DOCENTE` ("Gênero do docente", V412), mas ele descreve
+  uma versão de 2018 do arquivo. O CSV publicado (`br-capes-colsucup-docente-2004a2012-2021-03-01.csv`,
+  33 colunas) não traz essa coluna. Os conjuntos têm `NM_DOCENTE`, `AN_NASCIMENTO_DOCENTE` e
+  `SG_ENTIDADE_ENSINO`; de 2013 em diante, também `ID_PESSOA`. Também não têm sexo: os discentes,
+  o Autor da Produção Intelectual 2017–2020 e os Bolsistas DPB. A cópia de 2022 no Wayback
+  Machine é a mesma versão 2021-03-01.
+- **ORCID.** O registro público (API v3.0) não tem campo de gênero nem de pronome. Aqui,
+  `genero_fonte = orcid` quer dizer que o ORCID é a **chave** da anotação manual do MO412 no
+  `genero2.csv`; o gênero não vem do ORCID. Algumas pessoas têm biografia pública: 28 das 122
+  da lista com ORCID fora do `genero2`. Os `researcher-urls` às vezes trazem o link do Lattes.
+
+### Próximo passo: marcadores no resumo do Lattes
+
+A ideia é usar a autodesignação no resumo do Lattes, em geral escrito pela própria pessoa, com
+termos como "professora/professor", "doutora/doutor", "pesquisadora", "graduada" e
+"coordenadora". Não é inferência pelo prenome, mas é gênero **gramatical** e binário, e deve ser
+documentado assim. Quando for implementar:
+
+- usar uma fonte nova (por exemplo, `genero_fonte = lattes_resumo`), porque `lattes` já tem outro
+  sentido acima;
+- guardar o trecho casado para auditoria. Marcadores conflitantes vão para a lista manual;
+- antes de preencher, aplicar o método a quem já está no `genero2.csv` e tem Lattes, e medir a
+  concordância;
+- cobertura: das 491 pessoas da lista, 181 têm Lattes no MARC, e 296 não têm Lattes nem ORCID.
+  Para essas, o Lattes precisa ser encontrado pelo ORCID ou por busca manual. A página de
+  currículo do Lattes tem CAPTCHA e não há API aberta, então a coleta será semi-manual e deve
+  respeitar os termos do CNPq. O mesmo método vale para as biografias do ORCID.
+
 ## Particularidades dos dados (detalhes em `relatorio_validacao.md`)
 
 - O campo 942 (“Banca:”) lista o primeiro orientador e os avaliadores, **mas não o

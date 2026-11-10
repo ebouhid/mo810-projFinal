@@ -1,11 +1,21 @@
 # Projeto Final — MO810
 
-Este repositório usa os dados abertos da CAPES sobre **discentes da pós-graduação
-*stricto sensu* no Brasil, de 2004 a 2024**, com foco no programa de Ciência da
-Computação da Unicamp (IC).
+O projeto cruza duas bases sobre a pós-graduação do Instituto de Computação da
+Unicamp (IC):
 
-Os dados brutos (~2,7 GB) **não** estão versionados. Este documento explica como
-obtê-los e como gerar o recorte usado no projeto.
+| Frente | Pasta | Documentação |
+|--------|-------|--------------|
+| Trajetória discente: dados abertos da CAPES sobre **discentes da pós-graduação *stricto sensu***, 2004–2024 | raiz (`baixar_discentes_capes.py`, `extrair_ic_capes.py`, `ic_capes-anon/`) | este arquivo |
+| Bancas de defesa: registro MARC de cada defesa do IC, 2006–2025, com papel, ORCID, Lattes e gênero de quem participou | `marc/` | [`marc/README.md`](marc/README.md) |
+| Entradas legadas do projeto anterior (MO412), usadas pelos scripts de `marc/` | `base_mo412/` | [`base_mo412/README.md`](base_mo412/README.md) |
+
+A pasta `marc/` veio do fork do repositório do MO412 (`ebouhid/mo412-projetofinal`),
+com o histórico de commits preservado. Os comandos de `marc/README.md` rodam a partir
+da raiz deste repositório.
+
+O restante deste documento trata da frente CAPES. Os dados brutos (~2,7 GB) **não**
+estão versionados. As seções abaixo explicam como obtê-los e como gerar o recorte
+usado no projeto.
 
 ## O que já está no repositório
 
